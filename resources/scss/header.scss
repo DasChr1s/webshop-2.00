@@ -1,0 +1,166 @@
+header {
+  background-color: $background-color-dark;
+  color: $white;
+  padding: 1rem;
+  transition: padding 0.3s ease;
+
+  &.header-with-title {
+    padding: 1rem;
+  }
+
+  &.header-no-title {
+    padding: 0;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  .nav-menu {
+    ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      margin-top: 40px;
+
+      @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: center;
+        margin-top: 0;
+      }
+
+      li {
+        margin: 0.5rem 0;
+
+        @media (min-width: 768px) {
+          margin: 0 1rem;
+        }
+
+        a {
+          text-decoration: none;
+          color: $white;
+          font-weight: bold;
+          font-size: 20px;
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          transition: color 0.3s ease, background-color 0.3s ease;
+
+          &:hover {
+            color: $light-gray;
+            background-color: $dark-gray;
+          }
+
+          @media screen and (max-width: 768px) {
+            font-size: 18px;
+          }
+        }
+
+        .button {
+          color: $white;
+          background-color: transparent;
+          border: none;
+          padding: 0.5rem 1rem;
+          cursor: pointer;
+          border-radius: 8px;
+          transition: color 0.3s ease, background-color 0.3s ease;
+
+          &:hover {
+            color: $light-gray;
+            background-color: $dark-gray;
+          }
+        }
+      }
+    }
+  }
+
+  .logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+
+    .logo {
+      height: 60px;
+      width: auto;
+      transition: transform 0.3s ease;
+    }
+
+    &:hover .logo {
+      transform: translateY(-10px);
+    }
+
+    .hover-text {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: $white;
+      color: $text-color;
+      padding: 0.5rem;
+      font-size: 12px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      white-space: nowrap;
+    }
+
+    &:hover .hover-text {
+      opacity: 1;
+    }
+  }
+
+  /* Neues SCSS für den Warenkorb */
+  .cart-container {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+
+    .cart-icon {
+      display: inline-block;
+      position: relative;
+
+      img {
+        width: 30px;
+        height: 30px;
+        filter: brightness(0) invert(1);
+      }
+
+      .badge {
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        padding: 5px 8px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+    }
+
+    &:hover .cart-icon img {
+      transform: scale(1.1);
+      transition: transform 0.3s ease;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .logo {
+    height: 70px;
+  }
+}
+
+@media (min-width: 992px) {
+  .logo {
+    height: 80px;
+  }
+}

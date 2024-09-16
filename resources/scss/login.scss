@@ -1,0 +1,133 @@
+.login,
+.register {
+  .button {
+    img {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
+  }
+
+  margin: 5% auto;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  width: 50%;
+  max-width: 400px;
+  padding: 2rem;
+  border: 2px solid $border-color;
+  border-radius: 8px;
+  background-color: $background-color;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    label {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+      color: $text-color;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      width: 100%;
+      color: $text-color;
+    }
+
+    button[type="submit"] {
+      padding: 0.75rem;
+      background-color: $primary-color;
+      color: $white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: $primary-color-hover;
+      }
+    }
+  }
+
+  p {
+    margin-top: 1rem;
+    text-align: center;
+    color: $text-color;
+
+    a {
+      color: $muted-dark;
+      text-decoration: none;
+
+      &:hover {
+        color: $primary-color;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  div {
+    background-color: $error-background-color;
+    color: $error-text-color;
+    padding: 1rem;
+    border: 1px solid $error-text-color;
+    border-radius: 5px;
+    margin-top: 1rem;
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+
+  .login,
+  .register {
+    padding: 2.5rem;
+  }
+
+  form {
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      padding: 0.75rem;
+    }
+
+    button[type="submit"] {
+      padding: 1rem;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+
+  .login,
+  .register {
+    padding: 3rem;
+    margin: 5% auto;
+    margin-top: 3%;
+    margin-bottom: 10%;
+    width: 70%;
+    max-width: 600px;
+  }
+
+  form {
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      padding: 1rem;
+    }
+
+    button[type="submit"] {
+      padding: 1.25rem;
+    }
+  }
+}

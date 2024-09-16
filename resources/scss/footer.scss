@@ -1,0 +1,46 @@
+footer {
+    background-color: $background-color-dark;
+    color: $white;
+    padding: 1rem 0;
+  
+    .container {
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+  
+        .col-md-4 {
+          margin-bottom: 1rem;
+  
+          h5 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+          }
+  
+          p, ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+          }
+  
+          a {
+            text-decoration: none;
+            color: $white;
+            transition: color 0.3s ease;
+  
+            &:hover {
+              color: $light-gray;
+            }
+          }
+        }
+      }
+  
+      .text-center {
+        margin-top: 1rem;
+  
+        p {
+          margin: 0;
+        }
+      }
+    }
+  }
+  
