@@ -42,8 +42,11 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 Route::get('/', [ProductController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
+
 
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart/count', [CartController::class, 'getCartCount'])->name('cart.count');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');

@@ -6,3 +6,4 @@ window.jQuery = $;
 
 import './quantity';
 import './cart';
+import './cart-delete';

@@ -18,25 +18,36 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
+        
+        // Validierung der Produkt-ID und Menge
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
             'quantity' => 'required|integer|min:1',
         ]);
 
+        // Produkt-ID und Menge aus dem Request entnehmen
         $productId = $request->input('product_id');
         $quantity = $request->input('quantity');
 
+        // Hol den aktuellen Warenkorb aus der Session
         $cart = Session::get('cart', []);
+
+        // Prüfen, ob das Produkt bereits im Warenkorb ist
         if (isset($cart[$productId])) {
+            // Menge hinzufügen, wenn das Produkt bereits existiert
             $cart[$productId] += $quantity;
         } else {
+            // Neues Produkt mit der Menge hinzufügen
             $cart[$productId] = $quantity;
         }
 
+        // Warenkorb in der Session aktualisieren
         Session::put('cart', $cart);
 
-        return response()->noContent();
+        // Rückgabe ohne Seitenreload
+        return response()->json(['success' => true]);
     }
+
 
     public function getCartCount()
     {
@@ -47,7 +58,19 @@ class CartController extends Controller
 
     public function clear()
     {
-        Session::forget('cart'); // Entfernt die 'cart'-Session-Variable
+        Session::forget('cart');
         return redirect()->route('cart.show')->with('status', 'Warenkorb wurde geleert.');
+    }
+
+    public function destroy($id)
+    {
+        $cart = Session::get('cart', []);
+
+        if (isset($cart[$id])) {
+            unset($cart[$id]);
+            Session::put('cart', $cart);
+        }
+
+        return redirect()->route('cart.show')->with('status', 'Produkt wurde aus dem Warenkorb entfernt.');
     }
 }

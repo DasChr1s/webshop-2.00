@@ -8,6 +8,8 @@
         <div class="card">
             @if($product->image_url)
                 <img src="{{ asset('product_image/' . $product->image_url) }}" class="card-img-top" alt="{{ $product->name }}">
+            @else
+                <img src="{{ asset('product_image/placeholder.jpg') }}" class="card-img-top" alt="">
             @endif
             <div class="card-body">
                 <h5 class="card-title">{{ $product->name }}</h5>

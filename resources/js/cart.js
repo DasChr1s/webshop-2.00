@@ -1,31 +1,46 @@
 $(document).ready(function() {
     const $cartCountElement = $('#cart-count');
+    const $quantityInput = $('#quantity');
+    const $errorModal = $('#errorModal');
 
-    // Funktion zur Aktualisierung des Warenkorb-Zählers ohne CSS-Effekt
+    // Function to update the cart count without CSS effect
     function loadCartCount() {
         $.getJSON("/cart/count", function(data) {
-            $cartCountElement.text(data.count); // Setzt nur die Zahl, kein CSS-Effekt
+            $cartCountElement.text(data.count); // Set only the number, no CSS effect
         });
     }
 
-    // Funktion zur Aktualisierung des Warenkorb-Zählers mit CSS-Effekt
+    // Function to update the cart count with CSS effect
     function updateCartCount() {
         $.getJSON("/cart/count", function(data) {
             $cartCountElement.text(data.count);
-            // Badge visuell hervorheben
+            // Highlight the badge visually
             $cartCountElement.addClass('update');
-            setTimeout(() => $cartCountElement.removeClass('update'), 500); // Entfernt die Klasse nach 500ms
+            setTimeout(() => $cartCountElement.removeClass('update'), 500); // Remove the class after 500ms
         });
     }
 
-    // Event-Listener für das Formular zum Hinzufügen von Artikeln zum Warenkorb
+    // Validate the quantity before submitting the form
+    function isValidQuantity() {
+        const quantity = parseInt($quantityInput.val(), 10);
+        return !isNaN(quantity) && quantity > 0;
+    }
+
+    // Event listener for the form to add items to the cart
     $('form[method="POST"]').each(function() {
         const $form = $(this);
-        // Sicherstellen, dass der Event-Listener nicht mehrfach hinzugefügt wird
+        // Ensure the event listener is not added multiple times
         if (!$form.data('eventListenerAdded')) {
             $form.on('submit', function(event) {
-                event.preventDefault(); // Verhindert das Standard-Submit-Verhalten
+                event.preventDefault(); // Prevent the default submit behavior
 
+                // Check if the quantity is valid (applies to detail page)
+                if ($quantityInput.length && !isValidQuantity()) {
+                    $errorModal.modal('show'); // Show error modal if the quantity is invalid
+                    return; // Stop form submission if invalid
+                }
+
+                // Proceed with AJAX if the quantity is valid
                 $.ajax({
                     url: $form.attr('action'),
                     type: 'POST',
@@ -35,18 +50,18 @@ $(document).ready(function() {
                     },
                     data: $form.serialize(),
                     success: function() {
-                        // Nur wenn der Artikel erfolgreich hinzugefügt wurde, das Badge aktualisieren
+                        // Update the cart count
                         updateCartCount();
                     },
                     error: function() {
-                        console.error('Fehler beim Hinzufügen zum Warenkorb.');
+                        console.error('Error adding to cart.');
                     }
                 });
             });
-            $form.data('eventListenerAdded', true); // Markiert das Formular als bearbeitet
+            $form.data('eventListenerAdded', true); // Mark the form as processed
         }
     });
 
-    // Bei jedem Seitenaufruf oder nach dem Laden des Dokuments ohne Effekt
+    // Load the cart count on every page load or document ready without effect
     loadCartCount();
 });

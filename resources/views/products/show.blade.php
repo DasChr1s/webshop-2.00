@@ -36,14 +36,36 @@
                 <input type="number" id="quantity" name="quantity" min="1" value="1">
                 <button type="button" class="quantity-button plus">+</button>
             </div>
-            <form action="{{ route('cart.add') }}" method="POST">
+            
+            <form action="{{ route('cart.add') }}" method="POST" id="add-to-cart-form">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
-                <input type="hidden" name="quantity" id="quantity" value="1">
-                <button type="submit" class="buy-now-button">Jetzt kaufen</button>
+                <!-- Das versteckte quantity-Feld -->
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="buy-now-button">In den Warenkorb</button>
             </form>
+            
+            
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Fehler</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Bitte geben Sie eine gültige Anzahl ein.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 @endsection
-
-

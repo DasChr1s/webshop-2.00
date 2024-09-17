@@ -3,23 +3,20 @@
 @section('title', __('app.webshop'))
 
 @section('content')
-    <div class="container">
-        
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-lg-8 mx-auto text-center">
-                    <h2>{{ __('app.discoverProducts') }}</h2>
-                    <p class="lead">{{ __('app.discoverText') }}</p>
-                   
-                </div>
-            </div>
+<div class="container">
+    <div class="container mt-2 mb-5">
+        <div class="search-container position-relative">
+            <input type="text" id="product-search" class="form-control search-input" placeholder="Search products...">
+            <img src="{{ asset('icons/search.png') }}" alt="Search Icon" class="search-icon">
         </div>
         
-        <div class="row">
-            
-            @foreach($products as $product)
-                <x-product-card :product="$product" />
-            @endforeach
-        </div>
     </div>
+    
+    <div class="row">
+        @foreach($products as $product)
+            <x-product-card :product="$product" />
+        @endforeach
+    </div>
+</div>
 @endsection
+
