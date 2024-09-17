@@ -22,7 +22,7 @@
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <input type="hidden" name="quantity" value="1">
-                    <button type="submit" class="buy-now-button">Jetzt kaufen</button>
+                    <button type="submit" class="buy-now-button">hentai for ivan uwu</button>
                 </form>
             </div>
         </div>
