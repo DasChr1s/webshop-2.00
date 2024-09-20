@@ -1,18 +1,19 @@
 import $ from 'jquery';
+import './cart-calculations'; // Importiere die Berechnungsdatei
 
 $(document).ready(function() {
     const $cartCountElement = $('#cart-count');
 
-    // Function to update the cart count
+    // Funktion zur Aktualisierung der Warenkorbanzahl
     function updateCartCount() {
         $.getJSON("/cart/count", function(data) {
             $cartCountElement.text(data.count);
         });
     }
 
-    // Event listener for deleting items from the cart
+    // Event-Listener zum Löschen von Artikeln aus dem Warenkorb
     $('.cart-page-item-delete-form').on('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submit
+        event.preventDefault(); // Verhindert das Standardverhalten des Formulars
 
         const $form = $(this);
         const productId = $form.closest('.cart-page-item').data('product-id');
@@ -22,15 +23,18 @@ $(document).ready(function() {
             type: 'POST',
             data: $form.serialize(),
             success: function(response) {
-                // Remove the product from the list
+                // Entferne das Produkt aus der Liste
                 $form.closest('.cart-page-item').remove();
 
-                // Update the cart count
+                // Aktualisiere die Warenkorbanzahl
                 updateCartCount();
 
-                // Check if the cart is now empty and display message if needed
+                // Berechne den Gesamtwert neu
+                window.calculateCartTotal();
+
+                // Überprüfe, ob der Warenkorb jetzt leer ist und zeige ggf. eine Nachricht an
                 if ($('.cart-page-item').length === 0) {
-                    $('.cart-page-list').remove(); // Remove the product list
+                    $('.cart-page-list').remove(); // Entferne die Produktliste
                     $('.cart-page-container').append('<p class="cart-page-empty">Ihr Warenkorb ist leer.</p>');
                 }
             },

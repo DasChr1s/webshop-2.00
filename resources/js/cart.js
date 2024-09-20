@@ -1,46 +1,127 @@
-$(document).ready(function() {
+import $ from 'jquery';
+
+$(document).ready(function () {
     const $cartCountElement = $('#cart-count');
     const $quantityInput = $('#quantity');
     const $errorModal = $('#errorModal');
+    const $errorModalBody = $errorModal.find('.modal-body'); // Modal Body Element
 
-    // Function to update the cart count without CSS effect
+    // Funktion, um die Anzahl im Warenkorb ohne CSS-Effekt zu aktualisieren
     function loadCartCount() {
-        $.getJSON("/cart/count", function(data) {
-            $cartCountElement.text(data.count); // Set only the number, no CSS effect
+        $.getJSON("/cart/count", function (data) {
+            $cartCountElement.text(data.count); // Setzt nur die Zahl, ohne CSS-Effekt
         });
     }
 
-    // Function to update the cart count with CSS effect
+    // Funktion, um die Anzahl im Warenkorb mit CSS-Effekt zu aktualisieren
     function updateCartCount() {
-        $.getJSON("/cart/count", function(data) {
+        $.getJSON("/cart/count", function (data) {
             $cartCountElement.text(data.count);
-            // Highlight the badge visually
+            // Hebt das Badge visuell hervor
             $cartCountElement.addClass('update');
-            setTimeout(() => $cartCountElement.removeClass('update'), 500); // Remove the class after 500ms
+            setTimeout(() => $cartCountElement.removeClass('update'), 500); // Entfernt die Klasse nach 500ms
         });
     }
 
-    // Validate the quantity before submitting the form
-    function isValidQuantity() {
-        const quantity = parseInt($quantityInput.val(), 10);
-        return !isNaN(quantity) && quantity > 0;
+    // Funktion zur Validierung der Menge
+    function isValidQuantity(quantity) {
+        const parsedQuantity = parseFloat(quantity);
+
+        if (isNaN(parsedQuantity) || parsedQuantity <= 0) {
+            $errorModalBody.text('Bitte geben Sie eine gültige Zahl ein.'); // Aktualisiert den Text im Modal
+            return false; // Ungültige Menge
+        }
+
+        if (!Number.isInteger(parsedQuantity)) {
+            $errorModalBody.text('Bitte geben Sie eine ganze Zahl ein.'); // Aktualisiert den Text im Modal
+            return false; // Keine Ganzzahl
+        }
+
+        return true; // Menge ist gültig
     }
 
-    // Event listener for the form to add items to the cart
-    $('form[method="POST"]').each(function() {
-        const $form = $(this);
-        // Ensure the event listener is not added multiple times
-        if (!$form.data('eventListenerAdded')) {
-            $form.on('submit', function(event) {
-                event.preventDefault(); // Prevent the default submit behavior
+    // Event-Listener für die Aktualisieren-Schaltfläche
+    $('.cart-page-item-update').on('click', function () {
+        const $item = $(this).closest('.cart-page-item');
+        const productId = $item.data('product-id');
+        const quantity = $item.find('.cart-page-item-quantity-input').val();
 
-                // Check if the quantity is valid (applies to detail page)
-                if ($quantityInput.length && !isValidQuantity()) {
-                    $errorModal.modal('show'); // Show error modal if the quantity is invalid
-                    return; // Stop form submission if invalid
+        // Überprüfe die Menge
+        if (!isValidQuantity(quantity)) {
+            $errorModal.modal('show');
+            return;
+        }
+
+        // Führe AJAX-Anfrage zur Aktualisierung der Menge durch
+        $.ajax({
+            url: `/cart/update/${productId}`,
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: { quantity: quantity },
+            success: function () {
+                // Aktualisiere die Warenkorb-Anzahl
+                updateCartCount();
+                // Aktualisiere die Seite oder entferne das Element, wenn der Warenkorb leer ist
+                if ($('.cart-page-item').length === 0) {
+                    $('.cart-page-list').remove();
+                    $('.cart-page-total').remove(); // Entfernt das Gesamtwert-Div
+                } else {
+                    // Optionale Aktualisierung des Gesamtwerts hier, falls gewünscht
+                    // Du könntest hier den Gesamtwert des Warenkorbs erneut berechnen
+                }
+            },
+            error: function () {
+                console.error('Fehler beim Aktualisieren der Menge.');
+            }
+        });
+    });
+
+    // Event-Listener für das Formular zum Löschen von Artikeln im Warenkorb
+    $('.cart-page-item-delete-form').on('submit', function (event) {
+        event.preventDefault(); // Verhindert das Standard-Formularverhalten
+
+        const $form = $(this);
+        $.ajax({
+            url: $form.attr('action'),
+            type: 'POST',
+            data: $form.serialize(),
+            success: function () {
+                // Entfernt das Produkt aus der Liste
+                const $cartItem = $form.closest('.cart-page-item');
+                $cartItem.remove();
+
+                // Aktualisiert die Anzahl im Warenkorb
+                updateCartCount();
+
+                // Überprüft, ob der Warenkorb jetzt leer ist
+                if ($('.cart-page-item').length === 0) {
+                    // Entfernt die Produktliste und zeigt die Leer-Nachricht an
+                    $('.cart-page-list').remove(); 
+                    $('.cart-page-total').remove(); // Entfernt das Gesamtwert-Div
+                }
+            },
+            error: function () {
+                console.error('Fehler beim Löschen des Produkts.');
+            }
+        });
+    });
+
+    // Event-Listener für das Formular zum Hinzufügen von Artikeln zum Warenkorb
+    $('form[method="POST"]').each(function () {
+        const $form = $(this);
+        if (!$form.data('eventListenerAdded')) {
+            $form.on('submit', function (event) {
+                event.preventDefault(); // Verhindert das Standard-Submit-Verhalten
+
+                if ($quantityInput.length && !isValidQuantity($quantityInput.val())) {
+                    $errorModal.modal('show'); // Zeigt das Fehlermodul an, wenn die Menge ungültig ist
+                    return; // Stoppt das Formular, wenn ungültig
                 }
 
-                // Proceed with AJAX if the quantity is valid
+                // Fährt mit AJAX fort, wenn die Menge gültig ist
                 $.ajax({
                     url: $form.attr('action'),
                     type: 'POST',
@@ -49,19 +130,19 @@ $(document).ready(function() {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     data: $form.serialize(),
-                    success: function() {
-                        // Update the cart count
+                    success: function () {
+                        // Aktualisiert die Anzahl im Warenkorb
                         updateCartCount();
                     },
-                    error: function() {
-                        console.error('Error adding to cart.');
+                    error: function () {
+                        console.error('Fehler beim Hinzufügen zum Warenkorb.');
                     }
                 });
             });
-            $form.data('eventListenerAdded', true); // Mark the form as processed
+            $form.data('eventListenerAdded', true); // Markiert das Formular als verarbeitet
         }
     });
 
-    // Load the cart count on every page load or document ready without effect
+    // Lädt die Anzahl im Warenkorb bei jedem Seitenaufruf oder beim Dokumentenladen ohne Effekt
     loadCartCount();
 });

@@ -7,3 +7,5 @@ window.jQuery = $;
 import './quantity';
 import './cart';
 import './cart-delete';
+import './search';
+import './cart-calculations';

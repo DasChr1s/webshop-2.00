@@ -23,10 +23,18 @@ class ProductController extends Controller
     public function searchProduct(Request $request)
     {
         $search = $request->input('search');
-        $products = Product::where('name', 'like', "%$search%")->get();
-
-        return view('products.index', compact('products'));
+    
+        if (empty($search)) {
+            // Wenn kein Suchbegriff eingegeben wurde, gebe alle Produkte zurück
+            $products = Product::all();
+        } else {
+            // Andernfalls filtere nach dem Suchbegriff
+            $products = Product::where('name', 'like', "%$search%")->get();
+        }
+    
+        // Render die Teilansicht für die Produktliste
+        return view('products._product-list', compact('products'))->render();
     }
-
-   
+    
+    
 }

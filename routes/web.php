@@ -42,8 +42,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 Route::get('/', [ProductController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-Route::get('/products/search', [ProductController::class, 'search'])->name('products.search');
-
+Route::get('/search', [ProductController::class, 'searchProduct'])->name('products.search');
 
 Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');

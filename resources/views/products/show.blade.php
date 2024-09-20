@@ -13,15 +13,15 @@
                         <td>{{ $product->name }}</td>
                     </tr>
                     <tr>
-                        <td><strong>SKU:</strong></td>
+                        <td><strong>Produktnummer:</strong></td>
                         <td>{{ $product->sku }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Description:</strong></td>
+                        <td><strong>Beschreibung:</strong></td>
                         <td>{{ $product->description }}</td>
                     </tr>
                     <tr>
-                        <td><strong>Price:</strong></td>
+                        <td><strong>Preis:</strong></td>
                         <td>
                             <div class="price-container">
                                 <p class="price">€{{ number_format($product->price, 2) }}</p>
@@ -33,7 +33,7 @@
             </table>
             <div class="quantity-container">
                 <button type="button" class="quantity-button minus">-</button>
-                <input type="number" id="quantity" name="quantity" min="1" value="1">
+                <input type="number" id="quantity" name="quantity" min="1" value="1" step="1">
                 <button type="button" class="quantity-button plus">+</button>
             </div>
             
@@ -58,7 +58,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Bitte geben Sie eine gültige Anzahl ein.
+                    {{-- dynamischer text wird hier erzeugt --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
@@ -66,6 +66,7 @@
             </div>
         </div>
     </div>
+    
 
 
 @endsection

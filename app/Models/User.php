@@ -48,4 +48,8 @@ class User extends Authenticatable
     {
         return $this->is_admin == 1;
     }
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
 }

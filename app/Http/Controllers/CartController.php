@@ -18,7 +18,7 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
-        
+
         // Validierung der Produkt-ID und Menge
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
@@ -72,5 +72,32 @@ class CartController extends Controller
         }
 
         return redirect()->route('cart.show')->with('status', 'Produkt wurde aus dem Warenkorb entfernt.');
+    }
+
+    public function update(Request $request, $productId)
+    {
+        $quantity = $request->input('quantity');
+
+        // Überprüfe die Menge
+        if (is_numeric($quantity) && $quantity > 0 && intval($quantity) == $quantity) {
+            // Hol den aktuellen Warenkorb aus der Session
+            $cart = Session::get('cart', []);
+
+            // Überprüfe, ob das Produkt im Warenkorb ist
+            if (isset($cart[$productId])) {
+                // Aktualisiere die Menge
+                $cart[$productId] = $quantity;
+            } else {
+                // Füge das Produkt hinzu, falls es noch nicht im Warenkorb ist
+                $cart[$productId] = $quantity;
+            }
+
+            // Speichern den aktualisierten Warenkorb in der Session
+            Session::put('cart', $cart);
+
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['error' => 'Ungültige Menge'], 400);
+        }
     }
 }
