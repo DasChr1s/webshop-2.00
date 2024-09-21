@@ -16,8 +16,12 @@ class GuestOrderController extends Controller
     {
         // Validierung
         $validated = $request->validate([
+            'name' => 'required|string|max:255',
             'email' => 'required|email',
-            'address_id' => 'required|exists:addresses,id',
+            'street' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'postal_code' => 'required|string|max:20',
+            'country' => 'required|string|max:255',
             'cart' => 'required|array',
             'cart.*.product_id' => 'required|exists:products,id',
             'cart.*.quantity' => 'required|integer|min:1',
@@ -32,22 +36,26 @@ class GuestOrderController extends Controller
         DB::beginTransaction();
 
         try {
+            // Adresse erstellen
+            $address = Address::create([
+                'street' => $validated['street'],
+                'city' => $validated['city'],
+                'postal_code' => $validated['postal_code'],
+                'country' => $validated['country'],
+            ]);
+
             // Erstelle eine neue Gastbestellung
             $guestOrder = GuestOrder::create([
+                'name' => $validated['name'],  // Name speichern
                 'email' => $validated['email'],
-                'address_id' => $validated['address_id'],
+                'address_id' => $address->id,
                 'total_price' => $totalPrice,
             ]);
 
             // Füge die Bestellpositionen hinzu
             foreach ($validated['cart'] as $item) {
                 $product = Product::find($item['product_id']);
-                // Optional: Überprüfe, ob genug Lagerbestand vorhanden ist
-                if ($product->stock < $item['quantity']) {
-                    DB::rollBack();
-                    return response()->json(['error' => 'Nicht genügend Lagerbestand für Produkt ID ' . $item['product_id']], 400);
-                }
-
+               
                 OrderItem::create([
                     'guest_order_id' => $guestOrder->id,
                     'product_id' => $item['product_id'],
@@ -66,5 +74,24 @@ class GuestOrderController extends Controller
             DB::rollBack();
             return response()->json(['error' => 'Fehler bei der Bestellung: ' . $e->getMessage()], 500);
         }
+    }
+
+
+    public function showOrderForm()
+    {
+
+        // Warenkorb aus der Session holen
+        $cart = Session::get('cart', []);
+
+        // Wenn der Warenkorb leer ist, zur Warenkorbseite zurückkehren
+        if (empty($cart)) {
+            return redirect()->route('cart.index')->with('status', 'Ihr Warenkorb ist leer.');
+        }
+
+        // Produkte anhand der IDs im Warenkorb laden
+        $productIds = array_keys($cart);
+        $products = Product::whereIn('id', $productIds)->get();
+
+        return view('cart.order-data', ['products' => $products, 'cart' => $cart]);
     }
 }

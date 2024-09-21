@@ -18,14 +18,12 @@ class CartController extends Controller
 
     public function add(Request $request)
     {
-
         // Validierung der Produkt-ID und Menge
         $request->validate([
             'product_id' => 'required|integer|exists:products,id',
             'quantity' => 'required|integer|min:1',
         ]);
 
-        // Produkt-ID und Menge aus dem Request entnehmen
         $productId = $request->input('product_id');
         $quantity = $request->input('quantity');
 
@@ -34,19 +32,20 @@ class CartController extends Controller
 
         // Prüfen, ob das Produkt bereits im Warenkorb ist
         if (isset($cart[$productId])) {
-            // Menge hinzufügen, wenn das Produkt bereits existiert
             $cart[$productId] += $quantity;
         } else {
-            // Neues Produkt mit der Menge hinzufügen
             $cart[$productId] = $quantity;
         }
 
         // Warenkorb in der Session aktualisieren
         Session::put('cart', $cart);
 
-        // Rückgabe ohne Seitenreload
-        return response()->json(['success' => true]);
+        // Gib die neue Gesamtanzahl der Artikel zurück
+        $totalItems = array_sum($cart);
+
+        return response()->json(['success' => true, 'count' => $totalItems]);
     }
+
 
 
     public function getCartCount()

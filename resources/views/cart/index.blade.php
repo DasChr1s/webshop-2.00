@@ -34,9 +34,9 @@
             <!-- Gesamtwert des Warenkorbs anzeigen -->
             <div class="cart-page-total" align="right">
                 <h2 id="cart-total">Gesamtwert: €0.00</h2>
-                <button class="order-button">Bestellen</button>
+                <a href="{{ route('order.show') }}" class="order-button">Bestellen</a>
             </div>
-            
+           
         @endif
     </div>
 @endsection
