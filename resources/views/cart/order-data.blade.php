@@ -26,7 +26,8 @@
             <!-- E-Mail Eingabefeld -->
             <div class="form-group">
                 <label for="email">E-Mail:</label>
-                <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                <input type="email" id="email" name="email" class="form-control" value="{{ old('email') }}"
+                    required>
                 @error('email')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
@@ -35,7 +36,8 @@
             <!-- Adress-Eingabefelder -->
             <div class="form-group">
                 <label for="street">Straße:</label>
-                <input type="text" id="street" name="street" class="form-control" value="{{ old('street') }}" required>
+                <input type="text" id="street" name="street" class="form-control" value="{{ old('street') }}"
+                    required>
                 @error('street')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
@@ -43,7 +45,8 @@
 
             <div class="form-group">
                 <label for="city">Stadt:</label>
-                <input type="text" id="city" name="city" class="form-control" value="{{ old('city') }}" required>
+                <input type="text" id="city" name="city" class="form-control" value="{{ old('city') }}"
+                    required>
                 @error('city')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
@@ -51,7 +54,8 @@
 
             <div class="form-group">
                 <label for="postal_code">Postleitzahl:</label>
-                <input type="text" id="postal_code" name="postal_code" class="form-control" value="{{ old('postal_code') }}" required>
+                <input type="text" id="postal_code" name="postal_code" class="form-control"
+                    value="{{ old('postal_code') }}" required>
                 @error('postal_code')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
@@ -59,17 +63,18 @@
 
             <div class="form-group">
                 <label for="country">Land:</label>
-                <input type="text" id="country" name="country" class="form-control" value="{{ old('country') }}" required>
+                <input type="text" id="country" name="country" class="form-control" value="{{ old('country') }}"
+                    required>
                 @error('country')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
             </div>
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Bestellung aufgeben</button>
+            </div>
 
-           
         </form>
-         <!-- Submit Button -->
-         <div class="form-group">
-            <button type="submit" class="btn btn-primary">Bestellung aufgeben</button>
-        </div>
+
     </div>
 @endsection

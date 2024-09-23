@@ -9,6 +9,8 @@ use App\Models\GuestOrder;
 use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Address;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderShipped;
 
 class GuestOrderController extends Controller
 {
@@ -46,7 +48,7 @@ class GuestOrderController extends Controller
 
             // Erstelle eine neue Gastbestellung
             $guestOrder = GuestOrder::create([
-                'name' => $validated['name'],  // Name speichern
+                'name' => $validated['name'],
                 'email' => $validated['email'],
                 'address_id' => $address->id,
                 'total_price' => $totalPrice,
@@ -55,7 +57,7 @@ class GuestOrderController extends Controller
             // Füge die Bestellpositionen hinzu
             foreach ($validated['cart'] as $item) {
                 $product = Product::find($item['product_id']);
-               
+
                 OrderItem::create([
                     'guest_order_id' => $guestOrder->id,
                     'product_id' => $item['product_id'],
@@ -69,12 +71,16 @@ class GuestOrderController extends Controller
 
             DB::commit();
 
+            // Sende eine E-Mail mit den Bestelldaten
+            Mail::to($validated['email'])->send(new OrderShipped($guestOrder));
+
             return response()->json(['success' => true, 'order_id' => $guestOrder->id]);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => 'Fehler bei der Bestellung: ' . $e->getMessage()], 500);
         }
     }
+
 
 
     public function showOrderForm()
@@ -94,4 +100,6 @@ class GuestOrderController extends Controller
 
         return view('cart.order-data', ['products' => $products, 'cart' => $cart]);
     }
+
+   
 }
