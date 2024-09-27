@@ -22,12 +22,13 @@
                 @endforeach
             </ul>
         </nav>
-         <div class="cart-container">
+        @if (!auth()->check() || !auth()->user()->isAdmin())
+        <div class="cart-container">
             <a href="{{ route('cart.show') }}" class="cart-icon">
                 <img src="{{ asset('icons/cart.png') }}" alt="Warenkorb">
                 <span class="badge" id="cart-count">0</span>
             </a>
-           
         </div>
+        @endif
     </div>
 </header>

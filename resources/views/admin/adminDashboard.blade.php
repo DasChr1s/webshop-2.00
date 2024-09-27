@@ -1,22 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- resources/views/admin/adminDashboard.blade.php -->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
-    @vite('resources/scss/app.scss')
-</head>
+@extends('layouts.admin-layout')
 
-<body>
-    <x-header :links="[
-        ['url' => route('login'), 'label' => 'Produkte'],
-        ['url' => route('logout'), 'label' => 'Profil'],
-        ['type' => 'logout', 'label' => 'Logout'],
-    ]" />
-    <main>
-        <h1>Welcome to your admin dashboard, {{ Auth::user()->name }}!</h1>
-    </main>
-</body>
-
-</html>
+@section('admin-content')
+    <h1>Welcome, {{ Auth::user()->name }}!</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card text-white bg-primary">
+                <div class="card-header">Gastbestellungen Heute</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $todayOrdersCount }}</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-white bg-success">
+                <div class="card-header">Bestellungen Heute</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $todayOrdersCount }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

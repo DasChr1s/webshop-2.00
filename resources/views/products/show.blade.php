@@ -42,7 +42,7 @@
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <!-- Das versteckte quantity-Feld -->
                 <input type="hidden" name="quantity" value="1">
-                <button type="submit" class="buy-now-button">In den Warenkorb</button>
+                <button type="submit" class="buy-now-button cart-button">In den Warenkorb</button>
             </form>
             
             

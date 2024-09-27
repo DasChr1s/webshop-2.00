@@ -40,7 +40,8 @@ Route::get('/', function () {
 //admin routes
 Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/adminDashboard', [AdminController::class, 'index'])->name('admin.adminDashboard');
-    
+    Route::get('/admin/orders', [AdminController::class, 'manageOrders'])->name('admin.orders');
+    Route::get('/admin/products', [AdminController::class, 'manageProducts'])->name('admin.products');
 });
 
 

@@ -107,45 +107,40 @@ $(document).ready(function () {
     });
 
     // Event-Listener für das Formular zum Hinzufügen von Artikeln zum Warenkorb
-    $('form[method="POST"]').each(function () {
-        const $form = $(this);
-        const isAjaxForm = $form.data('ajax');
-        // Überprüfe, ob der Event-Listener bereits hinzugefügt wurde
-        if (!$form.data('eventListenerAdded')) {
-            $form.on('submit', function (event) {
+     // Füge einen Event-Listener für den Klick auf den Button mit der Klasse .buy-now-button hinzu
+     $('.cart-button').on('click', function(event) {
+        event.preventDefault(); // Verhindert das Standard-Submit-Verhalten
 
-                if (isAjaxForm) {
+        const $form = $(this).closest('form'); // Holt das zugehörige Formular
+        const isAjaxForm = $form.data('ajax'); // Prüft, ob es ein Ajax-Formular ist
 
-                    // Nur für andere Formulare, die per AJAX gesendet werden
-                    event.preventDefault(); // Verhindert das Standard-Submit-Verhalten
+        // Überprüft, ob das Formular tatsächlich als Ajax-Formular markiert ist
+        if (isAjaxForm) {
 
-                    // Validierung der Menge (angenommen, dass $quantityInput definiert ist)
-                    if ($quantityInput.length && !isValidQuantity($quantityInput.val())) {
-                        $errorModal.modal('show'); // Zeigt das Fehlermodul an, wenn die Menge ungültig ist
-                        return; // Stoppt das Formular, wenn ungültig
-                    }
+            // Validierung der Menge (wenn notwendig)
+            const $quantityInput = $form.find('input[name="quantity"]');
+            if ($quantityInput.length && !isValidQuantity($quantityInput.val())) {
+                $errorModal.modal('show'); // Zeigt das Fehlermodul an, wenn die Menge ungültig ist
+                return; // Stoppt das Formular, wenn ungültig
+            }
 
-                    // Fährt mit AJAX fort, wenn die Menge gültig ist
-                    $.ajax({
-                        url: $form.attr('action'),
-                        type: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        data: $form.serialize(),
-                        success: function (response) {
-                            // Aktualisiert die Anzahl im Warenkorb
-                            updateCartCount();
-                        },
-                        error: function () {
-                            console.error('Fehler beim Hinzufügen zum Warenkorb.');
-                        }
-                    });
-
+            // Sende die Daten per AJAX
+            $.ajax({
+                url: $form.attr('action'),
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: $form.serialize(),
+                success: function(response) {
+                    // Erfolg: Aktualisiert die Anzahl im Warenkorb oder zeigt eine Erfolgsmeldung
+                    updateCartCount();
+                },
+                error: function() {
+                    console.error('Fehler beim Hinzufügen zum Warenkorb.');
                 }
             });
-            $form.data('eventListenerAdded', true); // Markiere das Formular als Event-Listener hinzugefügt
         }
     });
 
