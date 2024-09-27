@@ -18,7 +18,7 @@
                 
                 <a href="{{ route('products.show', $product->id) }}" class="view-product-button">Produkt anzeigen</a>
 
-                <form action="{{ route('cart.add') }}" method="POST" style="display: inline;">
+                <form action="{{ route('cart.add') }}" method="POST" style="display: inline;" data-ajax="true">
                     @csrf
                     <input type="hidden" name="product_id" value="{{ $product->id }}">
                     <input type="hidden" name="quantity" value="1">

@@ -68,9 +68,6 @@ $(document).ready(function () {
                 if ($('.cart-page-item').length === 0) {
                     $('.cart-page-list').remove();
                     $('.cart-page-total').remove(); // Entfernt das Gesamtwert-Div
-                } else {
-                    // Optionale Aktualisierung des Gesamtwerts hier, falls gewünscht
-                    // Du könntest hier den Gesamtwert des Warenkorbs erneut berechnen
                 }
             },
             error: function () {
@@ -99,7 +96,7 @@ $(document).ready(function () {
                 // Überprüft, ob der Warenkorb jetzt leer ist
                 if ($('.cart-page-item').length === 0) {
                     // Entfernt die Produktliste und zeigt die Leer-Nachricht an
-                    $('.cart-page-list').remove(); 
+                    $('.cart-page-list').remove();
                     $('.cart-page-total').remove(); // Entfernt das Gesamtwert-Div
                 }
             },
@@ -112,34 +109,43 @@ $(document).ready(function () {
     // Event-Listener für das Formular zum Hinzufügen von Artikeln zum Warenkorb
     $('form[method="POST"]').each(function () {
         const $form = $(this);
+        const isAjaxForm = $form.data('ajax');
+        // Überprüfe, ob der Event-Listener bereits hinzugefügt wurde
         if (!$form.data('eventListenerAdded')) {
             $form.on('submit', function (event) {
-                event.preventDefault(); // Verhindert das Standard-Submit-Verhalten
 
-                if ($quantityInput.length && !isValidQuantity($quantityInput.val())) {
-                    $errorModal.modal('show'); // Zeigt das Fehlermodul an, wenn die Menge ungültig ist
-                    return; // Stoppt das Formular, wenn ungültig
-                }
+                if (isAjaxForm) {
 
-                // Fährt mit AJAX fort, wenn die Menge gültig ist
-                $.ajax({
-                    url: $form.attr('action'),
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    data: $form.serialize(),
-                    success: function () {
-                        // Aktualisiert die Anzahl im Warenkorb
-                        updateCartCount();
-                    },
-                    error: function () {
-                        console.error('Fehler beim Hinzufügen zum Warenkorb.');
+                    // Nur für andere Formulare, die per AJAX gesendet werden
+                    event.preventDefault(); // Verhindert das Standard-Submit-Verhalten
+
+                    // Validierung der Menge (angenommen, dass $quantityInput definiert ist)
+                    if ($quantityInput.length && !isValidQuantity($quantityInput.val())) {
+                        $errorModal.modal('show'); // Zeigt das Fehlermodul an, wenn die Menge ungültig ist
+                        return; // Stoppt das Formular, wenn ungültig
                     }
-                });
+
+                    // Fährt mit AJAX fort, wenn die Menge gültig ist
+                    $.ajax({
+                        url: $form.attr('action'),
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        data: $form.serialize(),
+                        success: function (response) {
+                            // Aktualisiert die Anzahl im Warenkorb
+                            updateCartCount();
+                        },
+                        error: function () {
+                            console.error('Fehler beim Hinzufügen zum Warenkorb.');
+                        }
+                    });
+
+                }
             });
-            $form.data('eventListenerAdded', true); // Markiert das Formular als verarbeitet
+            $form.data('eventListenerAdded', true); // Markiere das Formular als Event-Listener hinzugefügt
         }
     });
 

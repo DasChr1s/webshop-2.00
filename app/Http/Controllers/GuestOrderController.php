@@ -80,9 +80,10 @@ class GuestOrderController extends Controller
 
         // Send an email with the order details
         Mail::to($validated['email'])->queue(new OrderShipped($guestOrder));
-
+        $cartCount = (new CartController())->getCartCount();
         // Redirect to the cart page
-        return redirect()->route('cart.show')->with('status', 'Order has been sent successfully')->send();
+        return redirect()->route('cart.show')->with('status', 'Order has been sent successfully');
+        //return response()->json(data: ['success' => 'test']);
 
 
     }

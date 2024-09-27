@@ -2,13 +2,13 @@
 @section('title', __('app.login') )
 @section('content')
     <main class="login main-content">
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login') }}" data-ajax="false">
             @csrf
             <label for="email">{{ __('app.loginText.email') }}:</label>
             <input type="email" id="email" name="email" required>
             <br>
             <label for="password">{{ __('app.loginText.password') }}:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" required autocomplete="new-password">
             <br>
             <button type="submit">
                 <img src="{{ asset('logo/cat-icon.png') }}" alt="Icon">

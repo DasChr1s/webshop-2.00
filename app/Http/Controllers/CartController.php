@@ -15,6 +15,7 @@ class CartController extends Controller
         $products = Product::whereIn('id', $productIds)->get(); // Hol dir die Produkte basierend auf den IDs aus der Session
         return view('cart.index', ['products' => $products, 'cart' => $cart]);
     }
+    
 
     public function add(Request $request)
     {

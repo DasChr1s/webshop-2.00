@@ -3,6 +3,12 @@
 @section('content')
     <div class="cart-page-container">
         <h1 class="cart-page-title">Warenkorb</h1>
+        @if (session('status'))
+            <div class="alert alert-success">
+                {{ session('status') }}
+            </div>
+            
+        @endif
         @if ($products->isEmpty())
             <p class="cart-page-empty">Ihr Warenkorb ist leer.</p>
         @else

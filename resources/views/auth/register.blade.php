@@ -11,10 +11,10 @@
             <input type="email" id="email" name="email" required>
             <br>
             <label for="password">{{ __('app.registerText.password') }}:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" required autocomplete="new-password">
             <br>
             <label for="password_confirmation">{{ __('app.registerText.confirmPassword') }}:</label>
-            <input type="password" id="password_confirmation" name="password_confirmation" required>
+            <input type="password" id="password_confirmation" name="password_confirmation" required autocomplete="new-password">
             <br>
             <button type="submit">
                 <img src="{{ asset('logo/cat-icon.png') }}" alt="Icon">

@@ -43,10 +43,6 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     
 });
 
-//user routes
-Route::group(['middleware' => ['auth']], function () {
-
-});
 
 
 //free routes without authentication
@@ -56,11 +52,16 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 Route::get('/search', [ProductController::class, 'searchProduct'])->name('products.search');
 
-Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart/count', [CartController::class, 'getCartCount'])->name('cart.count');
 Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 
 Route::get('/order', [GuestOrderController::class, 'showOrderForm'])->name('order.show');
-Route::post('/order/store', [GuestOrderController::class, 'store'])->name('order.store');
+
+
+Route::middleware('web')->group(function () {
+    Route::post('/order/store', [GuestOrderController::class, 'store'])->name('order.store');
+    Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
+});

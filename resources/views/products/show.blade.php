@@ -37,7 +37,7 @@
                 <button type="button" class="quantity-button plus">+</button>
             </div>
             
-            <form action="{{ route('cart.add') }}" method="POST" id="add-to-cart-form">
+            <form action="{{ route('cart.add') }}" method="POST" id="add-to-cart-form" data-ajax="true">
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <!-- Das versteckte quantity-Feld -->
