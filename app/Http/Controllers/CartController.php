@@ -99,4 +99,6 @@ class CartController extends Controller
             return response()->json(['error' => 'Ungültige Menge'], 400);
         }
     }
+
+ 
 }

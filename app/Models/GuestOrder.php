@@ -14,6 +14,9 @@ class GuestOrder extends Model
         'billing_address',
         'total',
         'status',
+        'name',
+        'billing_city',
+        'billing_postal_code',
     ];
 
     // Beziehung zu `GuestOrderItem`

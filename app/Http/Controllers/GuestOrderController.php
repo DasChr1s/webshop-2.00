@@ -11,12 +11,17 @@ use App\Models\Product;
 use App\Models\Address;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
+use App\Models\GuestOrderItem;
+use Illuminate\Support\Facades\Validator;
 
 class GuestOrderController extends Controller
 {
     public function store(Request $request)
     {
-        // Validierung
+        // Retrieve cart from session
+        $cart = Session::get('cart', []);
+
+        // Validate request data (excluding cart)
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -24,82 +29,78 @@ class GuestOrderController extends Controller
             'city' => 'required|string|max:255',
             'postal_code' => 'required|string|max:20',
             'country' => 'required|string|max:255',
-            'cart' => 'required|array',
-            'cart.*.product_id' => 'required|exists:products,id',
-            'cart.*.quantity' => 'required|integer|min:1',
         ]);
 
-        // Berechne den Gesamtpreis
-        $totalPrice = array_reduce($validated['cart'], function ($carry, $item) {
-            $product = Product::find($item['product_id']);
-            return $carry + ($product->price * $item['quantity']);
-        }, 0);
+        // Validate cart
+        if (empty($cart)) {
+            \Log::error('Cart is empty');
+            return response()->json(['error' => 'Cart is empty'], 400);
+        }
+
+        // Calculate total price
+        $totalPrice = 0;
+        foreach ($cart as $productId => $quantity) {
+            $product = Product::find($productId);
+            if (!$product) {
+                \Log::error('Invalid product ID in cart: ' . $productId);
+                return response()->json(['error' => 'Invalid product ID in cart'], 400);
+            }
+            $totalPrice += $product->price * $quantity;
+        }
 
         DB::beginTransaction();
 
-        try {
-            // Adresse erstellen
-            $address = Address::create([
-                'street' => $validated['street'],
-                'city' => $validated['city'],
-                'postal_code' => $validated['postal_code'],
-                'country' => $validated['country'],
+        // Create a new guest order
+        $guestOrder = GuestOrder::create([
+            'name' => $validated['name'],
+            'guest_email' => $validated['email'],
+            'billing_address' => $validated['street'],
+            'billing_city' => $validated['city'],
+            'billing_postal_code' => $validated['postal_code'],
+            'status' => 'pending',
+        ]);
+
+        // Add the order items
+        foreach ($cart as $productId => $quantity) {
+            $product = Product::find($productId);
+
+            GuestOrderItem::create([
+                'guest_order_id' => $guestOrder->id,
+                'product_id' => $productId,
+                'quantity' => $quantity,
+                'price' => $product->price,
             ]);
-
-            // Erstelle eine neue Gastbestellung
-            $guestOrder = GuestOrder::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'address_id' => $address->id,
-                'total_price' => $totalPrice,
-            ]);
-
-            // Füge die Bestellpositionen hinzu
-            foreach ($validated['cart'] as $item) {
-                $product = Product::find($item['product_id']);
-
-                OrderItem::create([
-                    'guest_order_id' => $guestOrder->id,
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $product->price,
-                ]);
-            }
-
-            // Leere den Warenkorb in der Session
-            Session::forget('cart');
-
-            DB::commit();
-
-            // Sende eine E-Mail mit den Bestelldaten
-            Mail::to($validated['email'])->send(new OrderShipped($guestOrder));
-
-            return response()->json(['success' => true, 'order_id' => $guestOrder->id]);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json(['error' => 'Fehler bei der Bestellung: ' . $e->getMessage()], 500);
         }
+
+        // Clear the cart in the session
+        Session::forget('cart');
+       
+
+        DB::commit();
+
+        // Send an email with the order details
+        Mail::to($validated['email'])->queue(new OrderShipped($guestOrder));
+
+        // Redirect to the cart page
+        return redirect()->route('cart.show')->with('status', 'Order has been sent successfully')->send();
+
+
     }
-
-
 
     public function showOrderForm()
     {
-
-        // Warenkorb aus der Session holen
+        // Retrieve cart from session
         $cart = Session::get('cart', []);
 
-        // Wenn der Warenkorb leer ist, zur Warenkorbseite zurückkehren
+        // If the cart is empty, return to the cart page
         if (empty($cart)) {
-            return redirect()->route('cart.index')->with('status', 'Ihr Warenkorb ist leer.');
+            return redirect()->route('cart.show')->with('status', 'Ihr Warenkorb ist leer.');
         }
 
-        // Produkte anhand der IDs im Warenkorb laden
+        // Load products based on the IDs in the cart
         $productIds = array_keys($cart);
         $products = Product::whereIn('id', $productIds)->get();
 
         return view('cart.order-data', ['products' => $products, 'cart' => $cart]);
     }
-
-   
 }

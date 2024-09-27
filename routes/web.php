@@ -63,4 +63,4 @@ Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear')
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 
 Route::get('/order', [GuestOrderController::class, 'showOrderForm'])->name('order.show');
-Route::post('/order', [GuestOrderController::class, 'store'])->name('order.store');
+Route::post('/order/store', [GuestOrderController::class, 'store'])->name('order.store');
