@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\GuestOrderController;
@@ -42,6 +43,7 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
     Route::get('/admin/adminDashboard', [AdminController::class, 'index'])->name('admin.adminDashboard');
     Route::get('/admin/orders', [AdminController::class, 'manageOrders'])->name('admin.orders');
     Route::get('/admin/products', [AdminController::class, 'manageProducts'])->name('admin.products');
+    Route::get('/admin/products/create', [AdminProductController::class, 'create'])->name('admin.products.create');
 });
 
 

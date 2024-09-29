@@ -9,7 +9,7 @@
             <div class="card text-white bg-primary">
                 <div class="card-header">Gastbestellungen Heute</div>
                 <div class="card-body">
-                    <h5 class="card-title">{{ $todayOrdersCount }}</h5>
+                    <h5 class="card-title">{{ $todayGuestOrdersCount }}</h5>
                 </div>
             </div>
         </div>
@@ -22,4 +22,7 @@
             </div>
         </div>
     </div>
+
+    @include('admin.graph.graph')
+  
 @endsection

@@ -9,8 +9,8 @@
             <br>
             <label for="password">{{ __('app.loginText.password') }}:</label>
             <input type="password" id="password" name="password" required autocomplete="new-password">
-            <br>
-            <button type="submit">
+            
+            <button type="submit" class="form-button">
                 <img src="{{ asset('logo/cat-icon.png') }}" alt="Icon">
                 {{ __('app.login') }}</button>
         </form>

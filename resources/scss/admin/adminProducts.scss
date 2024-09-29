@@ -1,0 +1,28 @@
+.add-btn{
+    background-color: $primary-color !important;
+    color: white !important;
+
+    &:hover{
+        background-color: $primary-color-hover !important;
+    }
+}
+
+.product-form{
+    max-width: 400px;
+
+    button[type="submit"] {
+        margin-top: 20px;
+        padding: 0.75rem;
+        background-color: $primary-color;
+        color: $white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: $primary-color-hover;
+        }
+      }
+}
+  

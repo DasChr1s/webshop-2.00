@@ -14,7 +14,7 @@
             <div class="card-body">
                 <h5 class="card-title">{{ $product->name }}</h5>
                 <p class=" card-text truncate">{{ $product->description }}</p>
-                <p class="card-text"><strong>Preis:</strong> €{{ number_format($product->price, 2) }}</p>
+                <p class="card-text"><strong>Preis:</strong> €{{ number_format($product->price + ($product->price * ($product->tax_rate / 100)), 2) }}</p>
                 
                 <a href="{{ route('products.show', $product->id) }}" class="view-product-button">Produkt anzeigen</a>
 

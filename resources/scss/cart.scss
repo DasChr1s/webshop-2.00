@@ -1,16 +1,16 @@
 .badge {
-    position: relative; /* Für absolute Positionierung der Pseudo-Elemente */
+    position: relative; 
     transition: background-color 0.3s ease, transform 0.3s ease;
-    border-radius: 50%; /* Runde Form für das Badge */
-    padding: 0.5rem 1rem; /* Optional: Größe und Form des Badges anpassen */
-    color: #fff; /* Textfarbe */
-    font-weight: bold; /* Text hervorheben */
+    border-radius: 50%; 
+    padding: 0.5rem 1rem; 
+    color: #fff; 
+    font-weight: bold; 
     
     &.update {
-        background-color: #f00; /* Rote Farbe für Aufmerksamkeit */
-        animation: grow 0.5s ease; /* Vergrößerungseffekt hinzufügen */
+        background-color: #f00; 
+        animation: grow 0.5s ease;
         
-        /* Glitzer-Effekte */
+        
         &:before,
         &:after {
             content: "";
@@ -22,17 +22,17 @@
             background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 80%);
             transform: translate(-50%, -50%);
             z-index: 1;
-            pointer-events: none; /* Verhindert, dass der Glitzereffekt das Badge verdeckt */
+            pointer-events: none; 
             animation: glitter 1.5s infinite linear;
         }
         
         &:before {
-            animation-duration: 2s; /* Unterschiedliche Animation-Dauer für ein abwechslungsreiches Glitzern */
+            animation-duration: 2s; 
         }
 
         &:after {
-            animation-duration: 2.5s; /* Unterschiedliche Animation-Dauer für ein abwechslungsreiches Glitzern */
-            animation-delay: 0.5s; /* Verzögerung hinzufügen */
+            animation-duration: 2.5s; 
+            animation-delay: 0.5s; 
         }
     }
 
@@ -41,7 +41,7 @@
             transform: scale(1);
         }
         50% {
-            transform: scale(1.3); /* Vergrößern während der Animation */
+            transform: scale(1.3); 
         }
         100% {
             transform: scale(1);
@@ -57,7 +57,7 @@
         }
     }
 }
-// resources/sass/cart-page.scss
+
 
 .cart-page-container {
     padding: 20px;
@@ -174,5 +174,7 @@
 
     &:hover {
       background-color: $primary-color-hover;
+      text-decoration: none;
+      color: #fff;
     }
   }

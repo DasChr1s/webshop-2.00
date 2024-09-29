@@ -24,8 +24,9 @@
                             @endif
                         </a>
                         <span class="cart-page-item-name">{{ $product->name }}</span>
-                        <span class="cart-page-item-price">€{{ number_format($product->price, 2) }}</span>
+                        <span class="cart-page-item-price">€{{ number_format($product->price + ($product->price * ($product->tax_rate / 100)), 2) }}</span>
                         <span class="cart-page-item-quantity">x {{ $cart[$product->id] }}</span>
+                        <span class="cart-page-item-tax">inkl. {{ $product->tax_rate }}% UST</span>
                         <div class="cart-page-item-actions">
                             <form action="{{ route('cart.destroy', $product->id) }}" method="POST" class="cart-page-item-delete-form">
                                 @csrf
@@ -39,7 +40,8 @@
 
             <!-- Gesamtwert des Warenkorbs anzeigen -->
             <div class="cart-page-total" align="right">
-                <h2 id="cart-total">Gesamtwert: €0.00</h2>
+                <span>(inkl. Mwst.)</span>
+                <h2 id="cart-total">Gesamtwert: €0.00 </h2> 
                 <a href="{{ route('order.show') }}" class="order-button">Bestellen</a>
             </div>
            

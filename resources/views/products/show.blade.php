@@ -67,6 +67,6 @@
         </div>
     </div>
     
-
+    <script src="{{ asset('js/calcPrice.js') }}"></script>
 
 @endsection

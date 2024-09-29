@@ -15,11 +15,13 @@ header {
   .container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; // Zentriert die Elemente
+    gap: 1rem; // Abstand zwischen den Elementen
 
     @media (min-width: 768px) {
       flex-direction: row;
       justify-content: space-between;
+      gap: 0; // Entfernt den Abstand in größeren Geräten
     }
   }
 
@@ -28,7 +30,7 @@ header {
       list-style: none;
       padding: 0;
       display: flex;
-      flex-direction: column;
+      flex-direction: column; // Elemente untereinander
       margin-top: 40px;
 
       @media (min-width: 768px) {
@@ -48,7 +50,7 @@ header {
           text-decoration: none;
           color: $white;
           font-weight: bold;
-          font-size: 20px;
+          font-size: 16px;
           padding: 0.5rem 1rem;
           border-radius: 8px;
           transition: color 0.3s ease, background-color 0.3s ease;
@@ -60,6 +62,20 @@ header {
 
           @media screen and (max-width: 768px) {
             font-size: 18px;
+          }
+        }
+
+        /* Logout-Link mit Hover-Effekt */
+        .logout-link {
+          color: $white;
+          background-color: transparent;
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          transition: color 0.3s ease, background-color 0.3s ease;
+
+          &:hover {
+            background-color: rgba(255, 0, 0, 0.1); // Leichtes Rot als Hintergrundfarbe
+            color: #ff4d4d; // Rote Textfarbe beim Hover
           }
         }
 
@@ -117,7 +133,6 @@ header {
     }
   }
 
-  /* Neues SCSS für den Warenkorb */
   .cart-container {
     position: relative;
     display: inline-block;
@@ -126,6 +141,7 @@ header {
     .cart-icon {
       display: inline-block;
       position: relative;
+      margin-left: -9px;
 
       img {
         width: 30px;
@@ -151,6 +167,19 @@ header {
       transition: transform 0.3s ease;
     }
   }
+
+  @media (max-width: 768px) {
+    .nav-menu ul {
+      flex-direction: column; 
+      align-items: center; 
+      gap: 1rem; 
+    }
+
+    .cart-container, .profile-badge {
+      margin-left: 0; 
+      margin-top: 1rem; 
+    }
+  }
 }
 
 @media (min-width: 768px) {
@@ -162,5 +191,29 @@ header {
 @media (min-width: 992px) {
   .logo {
     height: 80px;
+  }
+}
+
+.profile-badge {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: $primary-color; 
+  color: white;
+  text-align: center;
+  line-height: 40px; 
+  font-weight: bold;
+  margin-left: 40px; 
+  margin-right: 10px; 
+  position: relative;
+  cursor: pointer;
+
+  &:hover {
+      background-color: $primary-color-hover; 
+  }
+
+  .user-icon {
+      font-size: 1.2em;
   }
 }

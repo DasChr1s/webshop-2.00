@@ -9,3 +9,4 @@ import './cart';
 import './cart-delete';
 import './search';
 import './cart-calculations';
+import './calcPrice';
