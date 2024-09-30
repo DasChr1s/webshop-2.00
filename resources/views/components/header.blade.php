@@ -1,8 +1,7 @@
 <!-- resources/views/components/header.blade.php -->
 <header>
     <div class="container">
-        <a href="{{ route('products.index') }}" class="logo-container">
-            <img src="{{ asset('logo/cat-logo.png') }}" alt="Logo" class="logo">
+        <a href="{{ Auth::check() && Auth::user()->is_admin ? route('admin.adminDashboard') : route('products.index') }}" class="logo-container">            <img src="{{ asset('logo/cat-logo.png') }}" alt="Logo" class="logo">
             <div class="hover-text">Miau!</div>
         </a>
 

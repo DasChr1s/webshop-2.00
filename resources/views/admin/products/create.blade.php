@@ -6,35 +6,57 @@
 <main class="product-form main-content">
     <h1>Produkt erstellen</h1>
 
-    <form id="productForm" action="" method="POST" enctype="multipart/form-data">
+    <form id="productForm" action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
         <div class="mb-3">
             <label for="sku" class="form-label">SKU <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" name="sku" id="sku" required>
+            <input type="text" class="form-control @error('sku') is-invalid @enderror" name="sku" id="sku" required>
+            @error('sku')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
-            <input type="text" class="form-control" name="name" id="name" required>
+            <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" id="name" required>
+            @error('name')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Beschreibung <span class="text-danger">*</span></label>
+            <input type="text" class="form-control @error('name') is-invalid @enderror" name="description" id="description" required>
+            @error('description')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="price" class="form-label">Netto Preis <span class="text-danger">*</span></label>
-            <input type="number" class="form-control" name="price" id="price" required step="0.001" min="0">
+            <input type="number" class="form-control @error('price') is-invalid @enderror" name="price" id="price" required step="0.001" min="0">
             <div id="priceError" class="text-danger" style="display: none;"></div>
+            @error('price')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="tax" class="form-label">Steuer <span class="text-danger">*</span></label>
-            <input type="number" class="form-control" name="tax" id="tax" required step="0.01" min="0">
+            <input type="number" class="form-control @error('tax') is-invalid @enderror" name="tax" id="tax" required step="0.01" min="0">
             <div id="taxError" class="text-danger" style="display: none;"></div>
+            @error('tax')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
 
         <div class="mb-3">
             <label for="image_url" class="form-label">Bild <span class="text-muted" data-toggle="tooltip" title="Only JPG or PNG formats are allowed."><i class="bi bi-question-circle"></i></span><span class="text-danger">*</span></label>
-            <input type="file" class="form-control" name="image_url" id="image_url" accept=".jpg,.jpeg,.png" required>
+            <input type="file" class="form-control @error('image_url') is-invalid @enderror" name="image_url" id="image_url" accept=".jpg,.jpeg,.png" required>
             <div id="imageError" class="text-danger" style="display: none;"></div>
+            @error('image_url')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
             
             <!-- Vorschau-Bereich für das Bild -->
             <div class="image-preview mt-2" style="display: none;">
@@ -46,12 +68,12 @@
         <button type="submit" id="submitButton" class="btn btn-primary" disabled>Erstellen</button>
 
         @if ($errors->any())
-            <div class="error-messages">
-                <div>
+            <div class="alert alert-danger mt-3">
+                <ul>
                     @foreach ($errors->all() as $error)
-                        <p>{{ $error }}</p>
+                        <li>{{ $error }}</li>
                     @endforeach
-                </div>
+                </ul>
             </div>
         @endif
     </form>
@@ -94,7 +116,7 @@
         // Preisvalidierung
         $('#price').on('input', function() {
             const value = $(this).val();
-            const regex = /^(?!0\d)\d+(\.\d{0,3})?$/; // Maximal 3 Nachkommastellen, keine führenden Nullen
+            const regex = /^(?!0\d)\d+(\.\d{0,2})?$/; // Maximal 3 Nachkommastellen, keine führenden Nullen
             
             // Überprüfen, ob der Wert nur aus Zahlen und gültigen Zeichen besteht
             if (!regex.test(value)) {

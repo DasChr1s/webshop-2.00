@@ -21,31 +21,46 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($products as $product)
+                @foreach ($products as $product)
                     <tr>
                         <td>
-                            <img src="{{ asset('product_image/' . $product->image_url) }}" alt="{{ $product->name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                            <img src="{{ asset('product_image/' . $product->image_url) }}" alt="{{ $product->name }}"
+                                style="width: 50px; height: 50px; object-fit: cover;">
                         </td>
                         <td>{{ $product->sku }}</td>
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->price }} €</td>
-                        <td>{{ number_format($product->price + ($product->price * ($product->tax_rate / 100)), 2) }} €</td>
+                        <td>{{ number_format($product->price + $product->price * ($product->tax_rate / 100), 2) }} €</td>
                         <td>{{ $product->tax_rate }} %</td>
                         <td>
                             <div class="btn-group" role="group">
-                                <a href="#" class="btn btn-warning btn-sm me-2" title="Edit">
+                                <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-warning btn-sm me-2" title="Edit">
                                     <i class="bi bi-pencil"></i> Bearbeiten
                                 </a>
-                                <a href="#" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">
+                                <button type="button" class="btn btn-danger btn-sm" title="Delete"
+                                    onclick="showErrorModal('{{ $product->id }}', '{{ $product->name }}');">
                                     <i class="bi bi-trash3"></i> Löschen
-                                </a>
+                                </button>
                             </div>
-                            
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-    <script src="{{ asset('js/calcPrice.js') }}"></script>
+    @component('components.modals.error', ['message' => 'Wollen Sie den Artikel wirklich löschen?'])
+    @endcomponent
+    <script>
+        function showErrorModal(productId, productName) {
+            const modal = new bootstrap.Modal(document.getElementById('errorModal'));
+            const deleteButton = document.getElementById('confirmDelete');
+            const deleteForm = document.getElementById('deleteForm');
+
+            // Setze die Action-URL des Formulars auf die Produkt-ID
+            deleteForm.action = `/admin/products/${productId}`;
+
+            // Zeige das Modal an
+            modal.show();
+        }
+    </script>
 @endsection
