@@ -6,8 +6,7 @@
         @if (session('status'))
             <div class="alert alert-success">
                 {{ session('status') }}
-            </div>
-            
+            </div> 
         @endif
         @if ($products->isEmpty())
             <p class="cart-page-empty">Ihr Warenkorb ist leer.</p>
@@ -31,7 +30,7 @@
                             <form action="{{ route('cart.destroy', $product->id) }}" method="POST" class="cart-page-item-delete-form">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="cart-page-item-delete">Delete</button>
+                                <button type="submit" class="cart-page-item-delete">Entfernen</button>
                             </form>
                         </div>
                     </li>

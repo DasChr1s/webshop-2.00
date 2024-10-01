@@ -10,6 +10,7 @@ class AdminProductController extends Controller
     /**
      * Display a listing of the resource.
      */
+    //holt sich alle Produkte und zeigt sie an
     public function index()
     {
         return view('admin.products.index', ['products' => Product::all()]);
@@ -18,6 +19,7 @@ class AdminProductController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
     public function create()
     {
         return view('admin.products.create'); // Zeigt das Erstellungsformular an
@@ -25,6 +27,7 @@ class AdminProductController extends Controller
 
     public function store(Request $request)
     {
+        // Validierungsregeln
         $messages = [
             'sku.required' => 'Die SKU ist erforderlich.',
             'sku.unique' => 'Diese SKU existiert bereits.',
@@ -45,7 +48,7 @@ class AdminProductController extends Controller
             'description.max' => 'Die Beschreibung darf maximal 255 Zeichen lang sein.',
 
         ];
-
+        // Validierung der Eingaben
         $validatedData = $request->validate([
             'sku' => 'required|unique:products|max:255',
             'name' => 'required|max:255',
@@ -55,6 +58,7 @@ class AdminProductController extends Controller
             'description' => 'required|max:255',
         ], $messages);
 
+        // Produkt erstellen
         $product = new Product();
         $product->sku = $validatedData['sku'];
         $product->name = $validatedData['name'];
@@ -62,6 +66,7 @@ class AdminProductController extends Controller
         $product->tax_rate = $validatedData['tax'];
         $product->description = $validatedData['description'];
 
+        // Bildverarbeitung
         if ($request->hasFile('image_url')) {
             $imageName = $request->file('image_url')->getClientOriginalName();
             // Bild in public/product_image speichern
@@ -70,8 +75,10 @@ class AdminProductController extends Controller
             // Nur den Bildnamen in der Datenbank speichern
             $product->image_url = $imageName;
         }
+        // Produkt speichern
         $product->save();
 
+        // Weiterleitung zur Produktliste
         return redirect()->route('admin.products')->with('success', 'Produkt erfolgreich erstellt');
     }
 
@@ -88,7 +95,7 @@ class AdminProductController extends Controller
      */
     public function edit(string $id)
     {
-
+        // Produkt laden und Formular anzeigen für die Bearbeitung
         $product = Product::find($id);
         return view('admin.products.edit', ['product' => $product]);
     }
@@ -98,6 +105,7 @@ class AdminProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Validierungsregeln
         $messages = [
             'sku.required' => 'Die SKU ist erforderlich.',
             'sku.unique' => 'Diese SKU existiert bereits.',
@@ -117,16 +125,17 @@ class AdminProductController extends Controller
             'description.max' => 'Die Beschreibung darf maximal 255 Zeichen lang sein.',
         ];
 
-        // Validierung
+        // Validierung der Eingaben
         $validatedData = $request->validate([
             'sku' => 'required|max:255|unique:products,sku,' . $id,
             'name' => 'required|max:255',
             'price' => 'required|numeric|min:0',
             'tax' => 'required|numeric|min:0',
-            'image_url' => 'image|max:2048', 
+            'image_url' => 'image|max:2048',
             'description' => 'required|max:255',
         ], $messages);
 
+        // Produkt laden und aktualisieren
         $product = Product::find($id);
         $product->sku = $validatedData['sku'];
         $product->name = $validatedData['name'];
@@ -163,7 +172,7 @@ class AdminProductController extends Controller
      */
     public function destroy(string $id)
     {
-
+        // Produkt löschen
         $product = Product::find($id);
         $product->delete();
         return redirect()->route('admin.products')->with('success', 'Produkt erfolgreich gelöscht');

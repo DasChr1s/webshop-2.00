@@ -1,16 +1,18 @@
+//für die badge zahl beim warenkorb
 .badge {
     position: relative; 
     transition: background-color 0.3s ease, transform 0.3s ease;
     border-radius: 50%; 
     padding: 0.5rem 1rem; 
-    color: #fff; 
+    color: $white; 
     font-weight: bold; 
     
+    // Animation bei update der Zahl
     &.update {
-        background-color: #f00; 
+        background-color: $badge-color; 
         animation: grow 0.5s ease;
         
-        
+        // Glitzer Animation
         &:before,
         &:after {
             content: "";
@@ -19,23 +21,26 @@
             left: 50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 80%);
+            background: radial-gradient(circle, $badge-shiny-color 0%, $badge-fade-color 80%);
             transform: translate(-50%, -50%);
             z-index: 1;
             pointer-events: none; 
             animation: glitter 1.5s infinite linear;
         }
         
+        // Animation vorher
         &:before {
             animation-duration: 2s; 
         }
 
+        // Animation nachher
         &:after {
             animation-duration: 2.5s; 
             animation-delay: 0.5s; 
         }
     }
 
+    // keyframe für die größe
     @keyframes grow {
         0% {
             transform: scale(1);
@@ -48,6 +53,7 @@
         }
     }
 
+    // keyframe für das glitzern
     @keyframes glitter {
         0% {
             background-position: 0% 0%;
@@ -58,23 +64,22 @@
     }
 }
 
-
 .cart-page-container {
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px $box-shadow;
 }
 
 .cart-page-title {
     font-size: 24px;
     margin-bottom: 20px;
-    color: #333;
+    color: $cart-page-color;
 }
 
 .cart-page-empty {
     font-size: 18px;
-    color: #777;
+    color: $empty-cart-page;
 }
 
 .cart-page-list {
@@ -86,7 +91,7 @@
     display: flex;
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid $cart-page-item;
 }
 
 .cart-page-item:last-child {
@@ -112,19 +117,19 @@
 
 .cart-page-item-name {
     font-size: 18px;
-    color: #333;
+    color: $cart-page-color;
     flex: 1;
 }
 
 .cart-page-item-price {
     font-size: 18px;
-    color: #333;
+    color: $cart-page-color;
     margin-right: 20px;
 }
 
 .cart-page-item-quantity {
     font-size: 18px;
-    color: #333;
+    color: $cart-page-color;
     margin-right: 20px;
 }
 
@@ -150,22 +155,23 @@
 }
 
 .cart-page-item-delete {
-    background-color: #dc3545;
+    background-color: $color_crimson;
 }
 
 .cart-page-item-delete:hover {
-    background-color: #c82333;
+    background-color: $delete-button-hover-color;
 }
 
 .cart-page-item-delete-form {
     display: inline;
+    margin-left: 20px;
 }
 
 .order-button {
     display: inline-block;
     padding: 0.5rem 1rem;
     background-color: $primary-color;
-    color: #fff;
+    color: $white;
     border: none;
     border-radius: 5px;
     text-align: center;
@@ -175,6 +181,6 @@
     &:hover {
       background-color: $primary-color-hover;
       text-decoration: none;
-      color: #fff;
+      color: $white;
     }
   }

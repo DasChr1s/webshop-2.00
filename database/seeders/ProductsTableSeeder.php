@@ -9,11 +9,13 @@ class ProductsTableSeeder extends Seeder
 {
     public function run()
     {
+
+        //testdaten für die produkte
         DB::table('products')->insert([
             [
                 'name' => 'Shylily',
                 'description' => 'This is the best widget you will ever buy. It is so cool that you will want to buy another one. It is the best widget you will ever buy. It is so cool that you will want to buy another one. It is the best widget you will ever buy. It is so cool that you will want to buy another one.',
-                'price' => 19.99,
+                'price' => 15,
                 'tax_rate' => 20,
                 'image_url' => 'shylily.jpg',
                 'sku' => 'LILY1234',
@@ -23,7 +25,7 @@ class ProductsTableSeeder extends Seeder
             [
                 'name' => 'Stare Catto',
                 'description' => 'This is the best widget you will ever buy. It is so cool that you will want to buy another one. It is the best widget you will ever buy. It is so cool that you will want to buy another one. It is the best widget you will ever buy. It is so cool that you will want to buy another one.',
-                'price' => 29.99,
+                'price' => 20,
                 'tax_rate' => 20,
                 'image_url' => 'cat.jpg',
                 'sku' => 'CATTO5678',
@@ -33,7 +35,7 @@ class ProductsTableSeeder extends Seeder
             [
                 'name' => 'Harold',
                 'description' => 'This is the best widget you will ever buy. It is so cool that you will want to buy another one. It is the best widget you will ever buy. It is so cool that you will want to buy another one. It is the best widget you will ever buy. It is so cool that you will want to buy another one.',
-                'price' => 49.99,
+                'price' => 50,
                 'tax_rate' => 20,
                 'image_url' => 'harold.jpg',
                 'sku' => 'HAROLD1234',

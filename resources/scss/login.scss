@@ -18,7 +18,7 @@
   border: 2px solid $border-color;
   border-radius: 8px;
   background-color: $background-color;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px $background-color;
 
   form {
     display: flex;

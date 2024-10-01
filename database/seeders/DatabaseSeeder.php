@@ -18,7 +18,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        //ruft die seeder für die Produkte und die User auf
+        //diese tabellen werden mit daten gefüllt
         $this->call(ProductsTableSeeder::class);
+        $this->call(UserSeeder::class);
        
     }
 }

@@ -7,17 +7,14 @@
                 <p>{{ __('app.footer.descriptionCompany') }}</p>
             </div>
             <div class="col-md-4">
-                <h5>{{ __('app.footer.navigation') }}</h5>
-                <ul class="list-unstyled">
-                    @foreach ($links as $link)
-                        <li><a href="{{ $link['url'] }}" class="text-white">{{ $link['label'] }}</a></li>
-                    @endforeach
-                </ul>
+                
+                <img src="{{ asset('logo/logo.png') }}" alt="Logo" class="logo white-logo">
+
             </div>
             <div class="col-md-4">
                 <h5>{{ __('app.footer.contact') }}</h5>
-                <p>{{ __('app.footer.email') }}: info@deinwebshop.de</p>
-                <p>{{ __('app.footer.phone') }}: +49 123 456 7890</p>
+                <p>{{ __('app.footer.email') }}: chp-test-shop@gmx.at</p>
+                <p>{{ __('app.footer.phone') }}: Telefonnummer</p>
             </div>
         </div>
         <div class="text-center mt-3">

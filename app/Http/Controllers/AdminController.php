@@ -14,18 +14,22 @@ class AdminController extends Controller
 {
     public function index()
     {
+        //holt sich die aktuellen Bestellungen
         $ordersData = $this->currentOrders();
+        //formatiert den aktuellen Monat
         $currentMonthName = Carbon::now()->format('F');
 
+        //holt sich die Anzahl der Gast Bestellungen von heute
         $todayGuestOrdersCount = DB::table('guest_orders')
             ->whereDate('created_at', Carbon::today())
             ->count();
 
+        //holt sich die Anzahl der Benutzer Bestellungen von heute
         $todayOrdersCount = DB::table('orders')
             ->whereDate('created_at', Carbon::today())
             ->count();
 
-        // Admin-Dashboard oder Startseite
+        // Admin-Dashboard mit den aktuellen Bestellungen und der Anzahl der Bestellungen pro Tag im aktuellen Monat
         return view('admin.adminDashboard', [
             'todayGuestOrdersCount' => $todayGuestOrdersCount,
             'todayOrdersCount' => $todayOrdersCount,
@@ -35,12 +39,14 @@ class AdminController extends Controller
         ]);
     }
 
+    
     public function manageOrders()
     {
 
         return view('admin.orders.index');
     }
 
+    //holt sich alle Produkte und geht zur produkt liste des admins
     public function manageProducts()
     {
         $products = Product::all();
@@ -48,6 +54,7 @@ class AdminController extends Controller
         return view('admin.products.index', compact('products'));
     }
 
+    //holt sich die aktuellen Bestellungen
     public function currentOrders()
     {
         // Ermittelt den aktuellen Monat und Jahr

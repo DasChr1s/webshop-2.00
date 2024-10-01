@@ -17,11 +17,11 @@ return [
         'contact' => 'Kontakt',
         'terms' => 'AGB',
         'privacy' => 'Datenschutz',
-        'descriptionCompany' => 'Hier könnte eine kurze Beschreibung deines Unternehmens oder Projekts stehen.',
+        'descriptionCompany' => 'Eine kurze Beschreibung für das Projekt',
         'navigation' => 'Navigation',
         'email' => 'Email',
         'phone' => 'Telefon',
-        'yourWebshop' => 'Dein Webshop. Alle Rechte vorbehalten.',
+        'yourWebshop' => 'Ein Copyright',
         
     ],
     'loginText' => [

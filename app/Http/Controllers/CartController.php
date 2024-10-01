@@ -10,9 +10,13 @@ class CartController extends Controller
 {
     public function show()
     {
+        // Holt den aktuellen Warenkorb aus der Session
         $cart = Session::get('cart', []);
+        // Holt die Produkt-IDs aus dem Warenkorb
         $productIds = array_keys($cart);
-        $products = Product::whereIn('id', $productIds)->get(); // Hol dir die Produkte basierend auf den IDs aus der Session
+        // Holt die Produkte basierend auf den IDs aus der Session
+        $products = Product::whereIn('id', $productIds)->get(); 
+        // Gibt die Produkte und den Warenkorb an die Ansicht zurück
         return view('cart.index', ['products' => $products, 'cart' => $cart]);
     }
     
@@ -24,17 +28,19 @@ class CartController extends Controller
             'product_id' => 'required|integer|exists:products,id',
             'quantity' => 'required|integer|min:1',
         ]);
-
+        // Produkt-ID und Menge aus dem Request holen
         $productId = $request->input('product_id');
         $quantity = $request->input('quantity');
 
-        // Hol den aktuellen Warenkorb aus der Session
+        // Holt den aktuellen Warenkorb aus der Session
         $cart = Session::get('cart', []);
 
         // Prüfen, ob das Produkt bereits im Warenkorb ist
         if (isset($cart[$productId])) {
+            // Wenn ja, erhöhe die Menge
             $cart[$productId] += $quantity;
         } else {
+            // Wenn nicht, füge das Produkt mit der Menge hinzu
             $cart[$productId] = $quantity;
         }
 
@@ -51,13 +57,17 @@ class CartController extends Controller
 
     public function getCartCount()
     {
+        // Holt den aktuellen Warenkorb aus der Session und berechnet die Gesamtanzahl der Artikel
         $cart = Session::get('cart', []);
         $totalItems = array_sum($cart);
+        // Gibt die Gesamtanzahl der Artikel als JSON zurück
         return response()->json(['count' => $totalItems]);
     }
 
     public function clear()
     {
+        // Löscht den Warenkorb aus der Session
+        //war für testzwecke
         Session::forget('cart');
         return redirect()->route('cart.show')->with('status', 'Warenkorb wurde geleert.');
     }
@@ -71,7 +81,6 @@ class CartController extends Controller
             Session::put('cart', $cart);
         }
 
-        return redirect()->route('cart.show')->with('status', 'Produkt wurde aus dem Warenkorb entfernt.');
     }
 
     public function update(Request $request, $productId)

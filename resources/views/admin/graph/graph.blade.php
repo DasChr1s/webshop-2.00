@@ -1,14 +1,32 @@
+@php
+    $months = [
+        'January' => 'Januar',
+        'February' => 'Februar',
+        'March' => 'März',
+        'April' => 'April',
+        'May' => 'Mai',
+        'June' => 'Juni',
+        'July' => 'Juli',
+        'August' => 'August',
+        'September' => 'September',
+        'October' => 'Oktober',
+        'November' => 'November',
+        'December' => 'Dezember'
+    ];
+
+    $currentMonthNameGerman = $months[$currentMonthName];
+@endphp
+
 <div class="row ml-5 mr-5">
     <div class="col-md-12">
         <div class="">
-            <div class="card-header">Bestellungen für den Monat <span class="font-weight-bold text-decoration-underline">{{ $currentMonthName }}</span></div>
+            <div class="card-header">Bestellungen für den Monat <span class="font-weight-bold text-decoration-underline">{{ $currentMonthNameGerman }}</span></div>
             <div class="">
                 <canvas id="orderChart" width="400" height="200"></canvas>
             </div>
         </div>
     </div>
 </div>
-
 <script>
     $(document).ready(function() {
         var orderCounts = @json(array_values($orderCounts));
